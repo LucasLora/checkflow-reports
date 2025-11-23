@@ -1,5 +1,4 @@
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
@@ -8,7 +7,7 @@ using CheckFlow.Reports.UI.Views;
 
 namespace CheckFlow.Reports;
 
-public class App : Application
+public class App : Avalonia.Application
 {
     public override void Initialize()
     {
@@ -22,10 +21,10 @@ public class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainWindowViewModel()
-            };
+
+            var mainWindow = new MainWindow();
+            mainWindow.DataContext = new MainViewModel(mainWindow);
+            desktop.MainWindow = mainWindow;
         }
 
         base.OnFrameworkInitializationCompleted();
