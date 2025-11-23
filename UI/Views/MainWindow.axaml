@@ -3,7 +3,9 @@
         xmlns:views="clr-namespace:CheckFlow.Reports.UI.Views"
         x:Class="CheckFlow.Reports.UI.Views.MainWindow"
         Title="CheckFlow Reports"
-        Width="800" Height="480"
-        Icon="/Assets/Logo.png">
+        Icon="/Assets/Logo.png"
+        Width="600" Height="400"
+        MinWidth="600" MinHeight="400"
+        MaxWidth="1920" MaxHeight="1080">
     <views:MainView />
 </Window>

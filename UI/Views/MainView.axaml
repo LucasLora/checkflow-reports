@@ -6,12 +6,12 @@
     <StackPanel Margin="20" Spacing="12">
         <StackPanel Orientation="Horizontal" Spacing="8">
             <Button Content="Selecionar ZIP" Command="{Binding SelectZipCommand}" Width="140" />
-            <TextBlock Text="{Binding SelectedZipPath}" VerticalAlignment="Center" TextWrapping="Wrap" Width="540" />
+            <TextBlock Text="{Binding SelectedZipPath}" VerticalAlignment="Center" TextWrapping="Wrap" Width="1600" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Spacing="8">
             <Button Content="Gerar PDF" Command="{Binding GenerateReportCommand}" IsEnabled="{Binding CanGenerate}"
                     Width="140" />
-            <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center" FontStyle="Italic" />
+            <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center" TextWrapping="Wrap" Width="1600" />
         </StackPanel>
     </StackPanel>
 </UserControl>
