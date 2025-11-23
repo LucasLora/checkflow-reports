@@ -1,4 +1,5 @@
 using System;
+using CheckFlow.Reports.Domain.Enums;
 
 namespace CheckFlow.Reports.Domain.Models;
 
@@ -15,7 +16,14 @@ public class Photo
     public DateTime PhotoAttachedAt { get; set; }
 
     /// <summary>
+    ///     Propriedade usada apenas para JSON
     ///     Indica se a foto estava faltando no momento de exportar o checklist.
     /// </summary>
-    public bool Missing { get; set; }
+    public bool Missing
+    {
+        get => Status == PhotoStatus.MissingOnDevice;
+        set => Status = value ? PhotoStatus.MissingOnDevice : PhotoStatus.Ok;
+    }
+
+    public PhotoStatus Status { get; set; } = PhotoStatus.Ok;
 }

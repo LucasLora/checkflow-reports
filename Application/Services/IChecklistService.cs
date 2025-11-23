@@ -6,7 +6,7 @@ namespace CheckFlow.Reports.Application.Services;
 public interface IChecklistService
 {
     /// <summary>
-    ///     Lê o arquivo JSON extraído e retorna o checklist desserializado.
+    ///     Lê o arquivo JSON na pasta extraída e retorna o checklist desserializado.
     /// </summary>
     Task<Checklist> LoadChecklistAsync(string extractedFolder);
 
