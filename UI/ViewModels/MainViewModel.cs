@@ -85,9 +85,11 @@ public partial class MainViewModel(
             StatusMessage = "Gerando PDF...";
             var outputFolder = Path.GetDirectoryName(SelectedZipPath) ??
                                Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
             var safeName = string.Concat(checklist.Name.Split(Path.GetInvalidFileNameChars()));
             var outputFile = Path.Combine(outputFolder, $"{safeName}_report.pdf");
-            await pdfService.GeneratePdfAsync(checklist, outputFolder);
+
+            await pdfService.GeneratePdfAsync(checklist, tempDir, outputFolder, outputFile);
 
             StatusMessage = $"Concluído: {outputFile}";
         }
