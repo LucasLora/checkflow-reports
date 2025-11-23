@@ -2,6 +2,7 @@ using System.Linq;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using CheckFlow.Reports.Infrastructure.Services;
 using CheckFlow.Reports.UI.ViewModels;
 using CheckFlow.Reports.UI.Views;
 
@@ -22,8 +23,15 @@ public class App : Avalonia.Application
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
 
+            var zipService = new ZipService();
+            var checklistService = new ChecklistService();
+            var photoService = new PhotoService();
+            var pdfService = new PdfService();
+
             var mainWindow = new MainWindow();
-            mainWindow.DataContext = new MainViewModel(mainWindow);
+            mainWindow.DataContext =
+                new MainViewModel(zipService, checklistService, photoService, pdfService, mainWindow);
+
             desktop.MainWindow = mainWindow;
         }
 
