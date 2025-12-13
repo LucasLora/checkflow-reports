@@ -5,11 +5,11 @@
         <Nullable>enable</Nullable>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <ApplicationIcon>Assets/Logo.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
-        <Folder Include="UI\"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -24,9 +24,5 @@
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
         <PackageReference Include="QuestPDF" Version="2025.7.4"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <AdditionalFiles Include="UI\Views\MainWindow.axaml"/>
     </ItemGroup>
 </Project>
