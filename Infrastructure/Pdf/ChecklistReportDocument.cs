@@ -15,7 +15,7 @@ public class ChecklistReportDocument(Checklist checklist, string rootFolder) : I
 	{
 		return new DocumentMetadata
 		{
-			Title = checklist.Name
+			Title = checklist.Title
 		};
 	}
 
@@ -74,7 +74,7 @@ public class ChecklistReportDocument(Checklist checklist, string rootFolder) : I
 		}
 
 		col.Item().AlignCenter()
-			.Text(checklist.Name)
+			.Text(checklist.Title)
 			.FontSize(20)
 			.Bold();
 
@@ -91,7 +91,7 @@ public class ChecklistReportDocument(Checklist checklist, string rootFolder) : I
 				column.Item().Column(x =>
 				{
 					x.Item()
-						.Text(item.Name)
+						.Text(item.Title)
 						.FontSize(14)
 						.Bold();
 

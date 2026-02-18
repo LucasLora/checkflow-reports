@@ -99,7 +99,7 @@ public partial class MainViewModel(
 			var outputFolder = Path.GetDirectoryName(SelectedZipPath)
 			                   ?? Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
-			var safeName = string.Concat(checklist.Name.Split(Path.GetInvalidFileNameChars()));
+			var safeName = string.Concat(checklist.Title.Split(Path.GetInvalidFileNameChars()));
 			if (string.IsNullOrWhiteSpace(safeName))
 			{
 				safeName = "checklist";

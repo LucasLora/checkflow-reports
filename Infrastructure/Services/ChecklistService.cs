@@ -47,9 +47,9 @@ public class ChecklistService : IChecklistService
 	{
 		ArgumentNullException.ThrowIfNull(checklist);
 
-		if (string.IsNullOrWhiteSpace(checklist.Name))
+		if (string.IsNullOrWhiteSpace(checklist.Title))
 		{
-			throw new InvalidDataException("Checklist name is required.");
+			throw new InvalidDataException("Checklist title is required.");
 		}
 
 		if (checklist.Items.Count == 0)
@@ -59,9 +59,9 @@ public class ChecklistService : IChecklistService
 
 		foreach (var item in checklist.Items)
 		{
-			if (string.IsNullOrWhiteSpace(item.Name))
+			if (string.IsNullOrWhiteSpace(item.Title))
 			{
-				throw new InvalidDataException($"Item {item.ItemId} name is required.");
+				throw new InvalidDataException($"Item {item.ItemId} title is required.");
 			}
 
 			foreach (var photo in item.Photos)

@@ -16,7 +16,7 @@ public class Photo
 	/// </summary>
 	public string Path { get; set; } = string.Empty;
 
-	public DateTime PhotoAttachedAt { get; set; }
+	public DateTime AttachedAt { get; set; }
 
 	/// <summary>
 	///     Indicates whether the photo was missing on the device at the time the checklist was exported
