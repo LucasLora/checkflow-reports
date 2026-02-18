@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Avalonia;
 using QuestPDF;
 using QuestPDF.Infrastructure;
@@ -7,24 +7,24 @@ namespace CheckFlow.Reports;
 
 internal sealed class Program
 {
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
-    [STAThread]
-    public static void Main(string[] args)
-    {
-        Settings.License = LicenseType.Community;
+	// Initialization code. Don't use any Avalonia, third-party APIs or any
+	// SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+	// yet and stuff might break.
+	[STAThread]
+	public static void Main(string[] args)
+	{
+		Settings.License = LicenseType.Community;
 
-        BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
-    }
+		BuildAvaloniaApp()
+			.StartWithClassicDesktopLifetime(args);
+	}
 
-    // Avalonia configuration, don't remove; also used by visual designer.
-    private static AppBuilder BuildAvaloniaApp()
-    {
-        return AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .WithInterFont()
-            .LogToTrace();
-    }
+	// Avalonia configuration, don't remove; also used by visual designer.
+	private static AppBuilder BuildAvaloniaApp()
+	{
+		return AppBuilder.Configure<App>()
+			.UsePlatformDetect()
+			.WithInterFont()
+			.LogToTrace();
+	}
 }

@@ -5,25 +5,25 @@ namespace CheckFlow.Reports.Domain.Models;
 
 public class Photo
 {
-    public int PhotoId { get; set; }
-    public string FileName { get; set; } = string.Empty;
+	public int PhotoId { get; set; }
+	public string FileName { get; set; } = string.Empty;
 
-    /// <summary>
-    ///     Caminho relativo dentro do ZIP (ex.: "photos/1_photo.jpg").
-    /// </summary>
-    public string Path { get; set; } = string.Empty;
+	/// <summary>
+	///     Caminho relativo dentro do ZIP (ex.: "photos/1_photo.jpg").
+	/// </summary>
+	public string Path { get; set; } = string.Empty;
 
-    public DateTime PhotoAttachedAt { get; set; }
+	public DateTime PhotoAttachedAt { get; set; }
 
-    /// <summary>
-    ///     Propriedade usada apenas para JSON
-    ///     Indica se a foto estava faltando no momento de exportar o checklist.
-    /// </summary>
-    public bool Missing
-    {
-        get => Status == PhotoStatus.MissingOnDevice;
-        set => Status = value ? PhotoStatus.MissingOnDevice : PhotoStatus.Ok;
-    }
+	/// <summary>
+	///     Propriedade usada apenas para JSON
+	///     Indica se a foto estava faltando no momento de exportar o checklist.
+	/// </summary>
+	public bool Missing
+	{
+		get => Status == PhotoStatus.MissingOnDevice;
+		set => Status = value ? PhotoStatus.MissingOnDevice : PhotoStatus.Ok;
+	}
 
-    public PhotoStatus Status { get; set; } = PhotoStatus.Ok;
+	public PhotoStatus Status { get; set; } = PhotoStatus.Ok;
 }

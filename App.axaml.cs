@@ -10,41 +10,41 @@ namespace CheckFlow.Reports;
 
 public class App : Avalonia.Application
 {
-    public override void Initialize()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+	public override void Initialize()
+	{
+		AvaloniaXamlLoader.Load(this);
+	}
 
-    public override void OnFrameworkInitializationCompleted()
-    {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-            // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-            DisableAvaloniaDataAnnotationValidation();
+	public override void OnFrameworkInitializationCompleted()
+	{
+		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+		{
+			// Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
+			// More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
+			DisableAvaloniaDataAnnotationValidation();
 
-            var zipService = new ZipService();
-            var checklistService = new ChecklistService();
-            var photoService = new PhotoService();
-            var pdfService = new PdfService();
+			var zipService = new ZipService();
+			var checklistService = new ChecklistService();
+			var photoService = new PhotoService();
+			var pdfService = new PdfService();
 
-            var mainWindow = new MainWindow();
-            mainWindow.DataContext =
-                new MainViewModel(zipService, checklistService, photoService, pdfService, mainWindow);
+			var mainWindow = new MainWindow();
+			mainWindow.DataContext =
+				new MainViewModel(zipService, checklistService, photoService, pdfService, mainWindow);
 
-            desktop.MainWindow = mainWindow;
-        }
+			desktop.MainWindow = mainWindow;
+		}
 
-        base.OnFrameworkInitializationCompleted();
-    }
+		base.OnFrameworkInitializationCompleted();
+	}
 
-    private void DisableAvaloniaDataAnnotationValidation()
-    {
-        // Get an array of plugins to remove
-        var dataValidationPluginsToRemove =
-            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+	private static void DisableAvaloniaDataAnnotationValidation()
+	{
+		// Get an array of plugins to remove
+		var dataValidationPluginsToRemove =
+			BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
 
-        // remove each entry found
-        foreach (var plugin in dataValidationPluginsToRemove) BindingPlugins.DataValidators.Remove(plugin);
-    }
+		// remove each entry found
+		foreach (var plugin in dataValidationPluginsToRemove) BindingPlugins.DataValidators.Remove(plugin);
+	}
 }
