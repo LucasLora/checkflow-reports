@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using CheckFlow.Reports.Domain.Models;
 
 namespace CheckFlow.Reports.Application.Services;
@@ -6,7 +5,11 @@ namespace CheckFlow.Reports.Application.Services;
 public interface IPdfService
 {
 	/// <summary>
-	///     Gera o PDF final do checklist.
+	///     Generates the final PDF document for the specified checklist and saves it to the output folder.
 	/// </summary>
-	Task GeneratePdfAsync(Checklist checklist, string tempDir, string outputFolder, string outputFile);
+	/// <param name="checklist">Checklist used to generate the PDF.</param>
+	/// <param name="tempDir">Temporary directory used during PDF generation.</param>
+	/// <param name="outputFolder">Target folder for the generated PDF.</param>
+	/// <param name="outputFilePath">Output file path.</param>
+	void GeneratePdf(Checklist checklist, string tempDir, string outputFolder, string outputFilePath);
 }

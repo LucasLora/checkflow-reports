@@ -7,9 +7,9 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
-namespace CheckFlow.Reports.Infrastructure.Services.Documents;
+namespace CheckFlow.Reports.Infrastructure.Pdf;
 
-public class ChecklistDocument(Checklist checklist, string rootFolder) : IDocument
+public class ChecklistReportDocument(Checklist checklist, string rootFolder) : IDocument
 {
 	public DocumentMetadata GetMetadata()
 	{
@@ -59,15 +59,19 @@ public class ChecklistDocument(Checklist checklist, string rootFolder) : IDocume
 	{
 		var banner = LoadBanner();
 		if (banner.Length > 0)
+		{
 			col.Item()
 				.AlignCenter()
 				.Width(125)
 				.Image(banner);
+		}
 		else
+		{
 			col.Item()
 				.AlignCenter()
-				.Text("Não foi possível carregar o banner")
+				.Text("Unable to load banner image.")
 				.Italic();
+		}
 
 		col.Item().AlignCenter()
 			.Text(checklist.Name)
@@ -110,39 +114,45 @@ public class ChecklistDocument(Checklist checklist, string rootFolder) : IDocume
 		{
 			switch (photo.Status)
 			{
-				case PhotoStatus.MissingOnDevice:
+				case PhotoStatus.MissingFromDevice:
 					col.Item()
-						.Text("Foto removida do dispositivo antes da exportação.")
+						.Text("Foto ausente no dispositivo durante a exportação.")
 						.Italic();
 					break;
 
-				case PhotoStatus.MissingInZip:
+				case PhotoStatus.MissingFromZip:
 					col.Item()
-						.Text("Foto não encontrada no arquivo ZIP.")
+						.Text("Foto não encontrada dentro do arquivo ZIP.")
 						.Italic();
 					break;
 
-				case PhotoStatus.Ok:
-					var fullPath = Path.Combine(
-						rootFolder,
-						photo.Path?.Replace('\\', Path.DirectorySeparatorChar)
-							?.Replace('/', Path.DirectorySeparatorChar)
-						?? photo.FileName
-					);
+				case PhotoStatus.Available:
+					var relativePath = photo.Path?
+						                   .Replace('\\', Path.DirectorySeparatorChar)
+						                   .Replace('/', Path.DirectorySeparatorChar)
+					                   ?? photo.FileName;
+
+					var fullPath = Path.Combine(rootFolder, relativePath);
 
 					if (File.Exists(fullPath))
+					{
 						col.Item()
 							.Image(fullPath)
 							.FitWidth();
+					}
 					else
+					{
 						col.Item()
-							.Text("Arquivo de imagem não encontrado no disco.")
+							.Text("Arquivo da foto não encontrado no disco.")
 							.Italic();
+					}
+
 					break;
 
 				default:
 					throw new NotSupportedException(
-						$"Photo status não configurado no relatório: {photo.Status}");
+						$"Unsupported photo status in report generation: {photo.Status}"
+					);
 			}
 
 			col.Item()

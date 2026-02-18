@@ -1,12 +1,14 @@
-using System.Threading.Tasks;
 using CheckFlow.Reports.Domain.Models;
 
 namespace CheckFlow.Reports.Application.Services;
 
 public interface IPhotoService
 {
+	/// ///
 	/// <summary>
-	///     Verifica quais fotos existem e quais estão faltando dentro da pasta extraída.
+	///     Updates photo statuses based on their presence in the extracted folder.
 	/// </summary>
-	Task ValidatePhotosAsync(Checklist checklist, string extractedFolder);
+	/// <param name="checklist">Checklist containing the photos to evaluate.</param>
+	/// <param name="extractedFolder">Path to the extracted checklist folder.</param>
+	void UpdatePhotoStatuses(Checklist checklist, string extractedFolder);
 }

@@ -16,11 +16,18 @@ public partial class MainViewModel(
 	IPdfService pdfService,
 	Window window) : ViewModelBase
 {
+	[ObservableProperty] private bool isBusy;
+
 	[ObservableProperty] private string? selectedZipPath;
 
 	[ObservableProperty] private string statusMessage = string.Empty;
 
-	public bool CanGenerate => !string.IsNullOrEmpty(SelectedZipPath);
+	public bool CanGenerate => !string.IsNullOrEmpty(SelectedZipPath) && !IsBusy;
+
+	partial void OnIsBusyChanged(bool value)
+	{
+		OnPropertyChanged(nameof(CanGenerate));
+	}
 
 	partial void OnSelectedZipPathChanged(string? value)
 	{
@@ -34,7 +41,7 @@ public partial class MainViewModel(
 		{
 			var files = await window.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
 			{
-				Title = "Selecione o arquivo ZIP exportado",
+				Title = "Selecione o arquivo ZIP",
 				AllowMultiple = false,
 				FileTypeFilter =
 				[
@@ -58,48 +65,63 @@ public partial class MainViewModel(
 		}
 	}
 
+	private async Task RunStepAsync(string message, Action action)
+	{
+		StatusMessage = message;
+		await Task.Run(action);
+	}
+
 	[RelayCommand]
 	private async Task GenerateReportAsync()
 	{
 		if (string.IsNullOrEmpty(SelectedZipPath))
 		{
-			StatusMessage = "Selecione um ZIP antes de gerar.";
+			StatusMessage = "É necessário selecionar o ZIP antes de gerar o PDF.";
 			return;
 		}
 
+		IsBusy = true;
 		string? tempDir = null;
+
 		try
 		{
-			StatusMessage = "Extraindo ZIP...";
-			tempDir = await zipService.ExtractZipAsync(SelectedZipPath);
+			await RunStepAsync("Extraindo ZIP...", () => { tempDir = zipService.ExtractZip(SelectedZipPath); });
 
 			StatusMessage = "Carregando checklist...";
-			var checklist = await checklistService.LoadChecklistAsync(tempDir);
+			var checklist = await checklistService.LoadChecklistAsync(tempDir!);
 
 			StatusMessage = "Validando checklist...";
 			checklistService.ValidateChecklist(checklist);
 
-			StatusMessage = "Validando fotos (checando existência)...";
-			await photoService.ValidatePhotosAsync(checklist, tempDir);
+			await RunStepAsync("Validando fotos...", () =>
+				photoService.UpdatePhotoStatuses(checklist, tempDir!));
 
-			StatusMessage = "Gerando PDF...";
-			var outputFolder = Path.GetDirectoryName(SelectedZipPath) ??
-							   Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+			var outputFolder = Path.GetDirectoryName(SelectedZipPath)
+			                   ?? Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
 			var safeName = string.Concat(checklist.Name.Split(Path.GetInvalidFileNameChars()));
+			if (string.IsNullOrWhiteSpace(safeName))
+			{
+				safeName = "checklist";
+			}
+
 			var outputFile = Path.Combine(outputFolder, $"{safeName}_report.pdf");
 
-			await pdfService.GeneratePdfAsync(checklist, tempDir, outputFolder, outputFile);
+			await RunStepAsync("Gerando PDF...", () =>
+				pdfService.GeneratePdf(checklist, tempDir!, outputFolder, outputFile));
 
 			StatusMessage = $"Concluído: {outputFile}";
 		}
 		catch (Exception ex)
 		{
-			StatusMessage = "Erro: " + ex.Message;
+			StatusMessage = "Erro ao gerar o relatório: " + ex.Message;
 		}
 		finally
 		{
+			IsBusy = false;
+
 			if (!string.IsNullOrEmpty(tempDir) && Directory.Exists(tempDir))
+			{
 				try
 				{
 					Directory.Delete(tempDir, true);
@@ -108,6 +130,7 @@ public partial class MainViewModel(
 				{
 					// Ignore cleanup errors, temp folder removal is best-effort only.
 				}
+			}
 		}
 	}
 }

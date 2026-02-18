@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace CheckFlow.Reports.Domain.Models;
 
+/// <summary>
+///     Represents an item within a checklist.
+/// </summary>
 public class Item
 {
 	public int ItemId { get; set; }
