@@ -76,6 +76,7 @@ Essa organização facilita futuras evoluções sem adicionar complexidade prema
 - .NET 8
 - Avalonia UI
 - QuestPDF
+- SixLabors.ImageSharp (redimensionamento e otimização de imagens para geração de PDF)
 
 ---
 

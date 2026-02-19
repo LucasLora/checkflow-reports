@@ -136,8 +136,10 @@ public class ChecklistReportDocument(Checklist checklist, string rootFolder) : I
 
 					if (File.Exists(fullPath))
 					{
+						var optimizedPath = PdfHelper.PrepareImageForPdf(fullPath, rootFolder);
+
 						col.Item()
-							.Image(fullPath)
+							.Image(optimizedPath)
 							.FitWidth();
 					}
 					else
