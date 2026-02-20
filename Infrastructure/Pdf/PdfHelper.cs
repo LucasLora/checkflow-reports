@@ -9,8 +9,9 @@ namespace CheckFlow.Reports.Infrastructure.Pdf;
 public static class PdfHelper
 {
 	private const int MaxWidth = 1200;
+	private const int MaxHeight = 1200;
 
-	public static string PrepareImageForPdf(string originalPath, string workingFolder)
+	public static (string Path, bool IsPortrait) PrepareImageForPdf(string originalPath, string workingFolder)
 	{
 		var imagesDir = Path.Combine(workingFolder, "_pdf");
 		Directory.CreateDirectory(imagesDir);
@@ -19,20 +20,21 @@ public static class PdfHelper
 
 		using var image = Image.Load(originalPath);
 
-		if (image.Width > MaxWidth)
+		image.Mutate(x => x.AutoOrient());
+
+		var isPortrait = image.Height > image.Width;
+
+		if (image.Width > MaxWidth || image.Height > MaxHeight)
 		{
 			image.Mutate(x => x.Resize(new ResizeOptions
 			{
 				Mode = ResizeMode.Max,
-				Size = new Size(MaxWidth, 0)
+				Size = new Size(MaxWidth, MaxHeight)
 			}));
 		}
 
-		image.SaveAsJpeg(tempFile, new JpegEncoder
-		{
-			Quality = 80
-		});
+		image.SaveAsJpeg(tempFile, new JpegEncoder { Quality = 80 });
 
-		return tempFile;
+		return (tempFile, isPortrait);
 	}
 }

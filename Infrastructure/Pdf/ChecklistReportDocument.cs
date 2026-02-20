@@ -86,8 +86,15 @@ public class ChecklistReportDocument(Checklist checklist, string rootFolder) : I
 	{
 		col.Item().PaddingVertical(10).Column(column =>
 		{
-			foreach (var item in checklist.Items)
+			for (var i = 0; i < checklist.Items.Count; i++)
 			{
+				var item = checklist.Items[i];
+
+				if (i > 0 && item.Photos.Count > 0)
+				{
+					column.Item().PageBreak();
+				}
+
 				column.Item().Column(x =>
 				{
 					x.Item()
@@ -136,11 +143,20 @@ public class ChecklistReportDocument(Checklist checklist, string rootFolder) : I
 
 					if (File.Exists(fullPath))
 					{
-						var optimizedPath = PdfHelper.PrepareImageForPdf(fullPath, rootFolder);
+						var (optimizedPath, isPortrait) = PdfHelper.PrepareImageForPdf(fullPath, rootFolder);
 
-						col.Item()
-							.Image(optimizedPath)
-							.FitWidth();
+						if (isPortrait)
+						{
+							col.Item()
+								.MaxWidth(450)
+								.Image(optimizedPath);
+						}
+						else
+						{
+							col.Item()
+								.Image(optimizedPath)
+								.FitWidth();
+						}
 					}
 					else
 					{

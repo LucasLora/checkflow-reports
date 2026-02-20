@@ -4,7 +4,7 @@
         x:Class="CheckFlow.Reports.UI.Views.MainWindow"
         Title="CheckFlow Reports"
         Icon="avares://CheckFlow.Reports/Assets/Logo.png"
-        Width="1280" Height="720"
+        Width="640" Height="360"
         MinWidth="640" MinHeight="360"
         MaxWidth="1920" MaxHeight="1080">
 	<views:MainView />
